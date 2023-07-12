@@ -16,11 +16,7 @@
         packages.commitmono = pkgs.stdenvNoCC.mkDerivation {
           name = "commitmono-font";
           dontInstall = true;
-          src = pkgs.fetchzip {
-            url = self."CommitMono.zip";
-            sha256 = "sha256-YcZUKzRskiqmEqVcbK/XL6ypsNMbY49qJYFG3yZVF78=";
-            stripRoot = false;
-          };
+          src = "CommitMono.zip";
           installPhase = ''
             mkdir -p $out/share/fonts
             cp -R $src $out/share/fonts/opentype/
