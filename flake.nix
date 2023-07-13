@@ -49,24 +49,28 @@
               '';
               meta = { description = "DejaVu with complete Nerd Font patching (2023-07-13)"; };
           };
-          iwifira = pkgs.stdenvNoCC.mkDerivation {
-              name = "iwifira";
-              src = ./.;
+          iwidejavu = pkgs.stdenvNoCC.mkDerivation {
+              name = "iwidejavu";
+              src = pkgs.fetchzip {
+                url = "https://github.com/ToxicFrog/Ligaturizer/releases/download/v5/LigaturizedFonts.zip";
+                sha256 = "sha256-2ywFe7khH4WRmQoKwkDHacqKOPGve5fYFaNYGoPJsQ4=";
+                stripRoot = false;
+              };
               noConfig = true;
               buildInputs = [
                 pkgs.unzip
               ];
               installPhase = ''
                 mkdir -p $out/share/fonts/truetype
-                ${pkgs.nerd-font-patcher}/bin/nerd-font-patcher -c $src/IwiFira.ttf -o $out/share/fonts/truetype/
+                ${pkgs.nerd-font-patcher}/bin/nerd-font-patcher -c $src/LigaDejaVuSansMono.ttf -o $out/share/fonts/truetype/
               '';
-              meta = { description = "Custom Fira Code with complete Nerd Font patching (2023-07-13)"; };
+              meta = { description = "Custom dejavu Code with complete Nerd Font patching (2023-07-13)"; };
           }; in {
             packages = {
               inherit dejavusansmonocode-nerd-font;
               inherit dejavucode-nerd-font;
-              inherit iwifira;
-              default = iwifira;
+              inherit iwidejavu;
+              default = iwidejavu;
             };
           }
     );
