@@ -48,10 +48,25 @@
                 done
               '';
               meta = { description = "DejaVu with complete Nerd Font patching (2023-07-13)"; };
+          };
+          iwifira = pkgs.stdenvNoCC.mkDerivation {
+              name = "iwifira";
+              src = ./IwiFira.ttf;
+              noConfig = true;
+              buildInputs = [
+                pkgs.unzip
+              ];
+              installPhase = ''
+                mkdir -p $out/share/fonts/truetype
+                ${pkgs.nerd-font-patcher}/bin/nerd-font-patcher -c $src -o $out/share/fonts/truetype/
+              '';
+              meta = { description = "Custom Fira Code with complete Nerd Font patching (2023-07-13)"; };
           }; in {
             packages = {
               inherit dejavusansmonocode-nerd-font;
               inherit dejavucode-nerd-font;
+              inherit iwifira;
+              default = iwifira;
             };
           }
     );
