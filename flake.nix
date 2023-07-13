@@ -11,64 +11,29 @@
   outputs = { self, nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let pkgs = nixpkgs.legacyPackages.${system};
-          commitmono = pkgs.stdenvNoCC.mkDerivation {
-              name = "commitmono-font";
-              src = ./.;
+          dejavucode-nerd-font = pkgs.stdenvNoCC.mkDerivation {
+              name = "dejavucode-nerd-font";
+              src = pkgs.fetchzip {
+                url = "https://github.com/SSNikolaevich/DejaVuSansCode/releases/download/v1.2.2/dejavu-code-ttf-1.2.2.zip";
+                sha256 = "sha256-208QBXkeQIMwawCDhVG4DNqlGh5GYfhTNJybzMZhE/4=";
+              };
               noConfig = true;
               buildInputs = [
                 pkgs.unzip
               ];
               installPhase = ''
-                mkdir fonts
-                unzip $src/CommitMono.zip -d fonts
-                mkdir -p $out/share/fonts
-                cp -R fonts/ $out/share/fonts/opentype/
+                cd ttf
+                mkdir -p $out/share/fonts/truetype
+                for f in *; do
+                  ${pkgs.nerd-font-patcher}/bin/nerd-font-patcher -c --progressbars $f -o $out/share/fonts/truetype/
+                done
               '';
-              meta = { description = "Commit mono derivation 2023-07-12."; };
+              meta = { description = "DejaVu Sans Code with complete Nerd Font patching (2023-07-13)"; };
           }; in {
             packages = {
-              inherit commitmono;
-              default = commitmono;
+              inherit dejavucode-nerd-font;
+              default = dejavucode-nerd-font;
             };
           }
     );
 }
-
-
-        # defaultPackage = pkgs.symlinkJoin {
-        #   name = "iwifonts-1.0";
-        #   paths = builtins.attrValues
-        #     self.packages.${system}; # Add font derivation names here
-        # };
-
-        # packages.gillsans = pkgs.stdenvNoCC.mkDerivation {
-        #   name = "gillsans-font";
-        #   dontConfigue = true;
-        #   src = pkgs.fetchzip {
-        #     url =
-        #       "https://cdn.freefontsvault.com/wp-content/uploads/2020/02/03141445/Gill-Sans-Font-Family.zip";
-        #     sha256 = "sha256-YcZUKzRskiqmEqVcbK/XL6ypsNMbY49qJYFG3yZVF78=";
-        #     stripRoot = false;
-        #   };
-        #   installPhase = ''
-        #     mkdir -p $out/share/fonts
-        #     cp -R $src $out/share/fonts/opentype/
-        #   '';
-        #   meta = { description = "A Gill Sans Font Family derivation."; };
-        # };
-
-        # packages.palatino = pkgs.stdenvNoCC.mkDerivation {
-        #   name = "palatino-font";
-        #   dontConfigue = true;
-        #   src = pkgs.fetchzip {
-        #     url =
-        #       "https://www.dfonts.org/wp-content/uploads/fonts/Palatino.zip";
-        #     sha256 = "sha256-FBA8Lj2yJzrBQnazylwUwsFGbCBp1MJ1mdgifaYches=";
-        #     stripRoot = false;
-        #   };
-        #   installPhase = ''
-        #     mkdir -p $out/share/fonts
-        #     cp -R $src/Palatino $out/share/fonts/truetype/
-        #   '';
-        #   meta = { description = "The Palatino Font Family derivation."; };
-        # };
