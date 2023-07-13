@@ -25,7 +25,7 @@
               installPhase = ''
                 mkdir -p $out/share/fonts/truetype
                 for f in *.ttf; do
-                  ${pkgs.nerd-font-patcher}/bin/nerd-font-patcher -c --noprogressbars $f -o $out/share/fonts/truetype/
+                  ${pkgs.nerd-font-patcher}/bin/nerd-font-patcher -c $f -o $out/share/fonts/truetype/
                 done
               '';
               meta = { description = "DejaVu Sans Code with complete Nerd Font patching (2023-07-13)"; };
