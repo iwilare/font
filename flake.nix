@@ -51,14 +51,14 @@
           };
           iwifira = pkgs.stdenvNoCC.mkDerivation {
               name = "iwifira";
-              src = ./IwiFira.ttf;
+              src = ./.;
               noConfig = true;
               buildInputs = [
                 pkgs.unzip
               ];
               installPhase = ''
                 mkdir -p $out/share/fonts/truetype
-                ${pkgs.nerd-font-patcher}/bin/nerd-font-patcher -c $src -o $out/share/fonts/truetype/
+                ${pkgs.nerd-font-patcher}/bin/nerd-font-patcher -c $src/IwiFira.ttf -o $out/share/fonts/truetype/
               '';
               meta = { description = "Custom Fira Code with complete Nerd Font patching (2023-07-13)"; };
           }; in {
