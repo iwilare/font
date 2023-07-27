@@ -11,22 +11,22 @@
   outputs = { self, nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let pkgs = nixpkgs.legacyPackages.${system};
-          iwidejavu = pkgs.stdenvNoCC.mkDerivation {
-              name = "iwidejavu";
+          iwiDejaVu = pkgs.stdenvNoCC.mkDerivation {
+              name = "iwiDejaVu";
               src = pkgs.fetchzip {
                 url = "https://github.com/ToxicFrog/Ligaturizer/releases/download/v5/LigaturizedFonts.zip";
                 sha256 = "sha256-2ywFe7khH4WRmQoKwkDHacqKOPGve5fYFaNYGoPJsQ4=";
                 stripRoot = false;
               };
               noConfig = true;
-              buildInputs = [
-                pkgs.unzip
-              ];
+              buildInputs = [ ];
               installPhase = ''
                 mkdir -p $out/share/fonts/truetype
-                ${pkgs.nerd-font-patcher}/bin/nerd-font-patcher -c $src/LigaDejaVuSansMono.ttf -o $out/share/fonts/truetype/
+                ${pkgs.nerd-font-patcher}/bin/nerd-font-patcher -c $src/LigaDejaVuSansMono.ttf
+                ${pkgs.fontforge}/bin/fontforge -c "f=open('LigaDejaVuSansMNerdFont-Regular.ttf');f.fontname='IwiFont';f.generate('IwiFont.ttf')"
+                mv IwiFont.ttf $out/share/fonts/truetype/
               '';
-              meta = { description = "Custom dejavu Code with complete Nerd Font patching (2023-07-13)"; };
+              meta = { description = "Custom DejaVu Mono-inspired font with Ligaturizer and full Nerd Font patching (2023-07-13)"; };
           };
           dejavusansmonocode-nerd-font = pkgs.stdenvNoCC.mkDerivation {
               name = "dejavusansmonocode-nerd-font";
@@ -69,8 +69,8 @@
             packages = {
               inherit dejavusansmonocode-nerd-font;
               inherit dejavucode-nerd-font;
-              inherit iwidejavu;
-              default = iwidejavu;
+              inherit iwiDejaVu;
+              default = iwiDejaVu;
             };
           }
     );
