@@ -23,7 +23,12 @@
               installPhase = ''
                 mkdir -p $out/share/fonts/truetype
                 ${pkgs.nerd-font-patcher}/bin/nerd-font-patcher -c $src/LigaDejaVuSansMono.ttf
-                ${pkgs.fontforge}/bin/fontforge -c "f=open('LigaDejaVuSansMNerdFont-Regular.ttf');f.fontname='IwiDejaVu';f.generate('IwiDejaVu.ttf')"
+                ls
+                ${pkgs.fontforge}/bin/fontforge -c "\
+                  f=open('LigaDejaVuSansMNerdFont-Regular.ttf');\
+                  f.fontname=f.fullname=f.familyname='IwiDejaVu';\
+                  f.generate('IwiDejaVu.ttf')"
+                mv LigaDejaVuSansMNerdFont-Regular.ttf $out/share/fonts/truetype/
                 mv IwiDejaVu.ttf $out/share/fonts/truetype/
               '';
               meta = { description = "Custom DejaVu Mono-inspired font with Ligaturizer and full Nerd Font patching"; };
