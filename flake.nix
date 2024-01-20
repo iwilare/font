@@ -9,6 +9,7 @@
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }:
+    { name = "IwiDejaVu"; } //
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
@@ -75,7 +76,6 @@
           };
         };
       in {
-        name = "IwiDejaVu";
         packages = {
           inherit dejavusansmonocode-nerd-font;
           inherit dejavusanscode-nerd-font;
